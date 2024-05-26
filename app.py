@@ -37,7 +37,6 @@ prompt = ChatPromptTemplate.from_template(
     {context}
     <context>
     Questions:{input}
-    Language: {language}
     """
 )
 
@@ -69,8 +68,6 @@ if "vectors" not in st.session_state:
 # Input prompt for user question
 input_prompt = st.text_input("Enter Your Question From Documents")
 
-# Language selection
-language = st.selectbox("Select the language for the response", ["English", "Hindi", "Gujarati"])
 
 # Process the input prompt if provided and search button is pressed
 if st.button("Search"):
@@ -83,7 +80,7 @@ if st.button("Search"):
 
         # Measure the response time
         start = time.process_time()
-        response = retrieval_chain.invoke({'input': input_prompt, 'language': language})
+        response = retrieval_chain.invoke({'input': input_prompt})
         st.write("Response time:", time.process_time() - start)
         st.write(response['answer'])
 
