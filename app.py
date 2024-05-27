@@ -45,20 +45,14 @@ def vector_embedding():
     st.session_state.embeddings = GooglePalmEmbeddings()  # Embeddings instance
     if not os.path.exists('faiss_index'):
         st.session_state.loader = PyPDFDirectoryLoader(r'Document')  # Data Ingestion
-        st.write('step1')
         st.session_state.docs = st.session_state.loader.load()  # Document Loading
-        st.write('step2')
         st.session_state.text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)  # Chunk Creation
-        st.write('step3')
         st.session_state.final_documents = st.session_state.text_splitter.split_documents(st.session_state.docs)  # Splitting
-        st.write('step4')
         st.session_state.vectors = FAISS.from_documents(st.session_state.final_documents, st.session_state.embeddings)  # Vector embeddings
-        st.write('step5')
         st.session_state.vectors.save_local('faiss_index')
         st.write("ObjectBox Database is ready")
     else:
         st.session_state.vectors = FAISS.load_local("faiss_index", st.session_state.embeddings, allow_dangerous_deserialization=True)
-        st.write("Loaded vectors from faiss_index")
 
 # Ensure that the vector embeddings are loaded once per session
 if "vectors" not in st.session_state:
